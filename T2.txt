@@ -2,7 +2,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class billRecord {
+class BillRecord {
     private String date;
     private double amount;
     private String category;
