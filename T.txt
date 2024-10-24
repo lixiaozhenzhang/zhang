@@ -1,0 +1,145 @@
+import java.text.ParseException;  
+import java.text.SimpleDateFormat;  
+import java.util.ArrayList;  
+import java.util.Date;  
+import java.util.List;  
+import java.util.Scanner;  
+  
+class Transaction {  
+    String Date;  
+    double amount;  
+    String type; // "income" or "expense"  
+    String category;  
+    String note;  
+  
+    Transaction(String date, double amount, String type, String category, String note) {  
+        this.date = date;  
+        this.amount = amount;  
+        this.type = type;  
+        this.category = category;  
+        this.note = note;  
+    }  
+  
+    @Override  
+    public String toString() {  
+        return "Date: " + date + ", Amount: " + amount + ", Type: " + type + ", Category: " + category + ", Note: " + note;  
+    }  
+}  
+  
+class PersonalFinanceManager {  
+    List<Transaction> transactions = new ArrayList<>();  
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");  
+  
+    void recordIncome(String date, double amount, String category, String note) throws ParseException {  
+        if (amount <= 0) {  
+            System.out.println("Income amount must be positive.");  
+            return;  
+        }  
+        transactions.add(new Transaction(date, amount, "income", category, note));  
+    }  
+  
+    void recordExpense(String date, double amount, String category, String note) throws ParseException {  
+        if (amount <= 0) {  
+            System.out.println("Expense amount must be positive.");  
+            return;  
+        }  
+        transactions.add(new Transaction(date, amount, "expense", category, note));  
+    }  
+  
+    void listTransactions() {  
+        if (transactions.isEmpty()) {  
+            System.out.println("No transactions found.");  
+            return;  
+        }  
+        for (Transaction t : transactions) {  
+            System.out.println(t);  
+        }  
+    }  
+  
+    void calculateStatistics() {  
+        double totalIncome = 0;  
+        double totalExpense = 0;  
+  
+        for (Transaction t : transactions) {  
+            if (t.type.equals("income")) {  
+                totalIncome += t.amount;  
+            } else if (t.type.equals("expense")) {  
+                totalExpense += t.amount;  
+            }  
+        }  
+  
+        System.out.println("Total Income: " + totalIncome);  
+        System.out.println("Total Expense: " + totalExpense);  
+        System.out.println("Net Balance: " + (totalIncome - totalExpense));  
+    }  
+  
+    void run() {  
+        Scanner scanner = new Scanner(System.in);  
+        int choice;  
+  
+        do {  
+            System.out.println("Personal Finance Manager");  
+            System.out.println("1. Record Income");  
+            System.out.println("2. Record Expense");  
+            System.out.println("3. List Transactions");  
+            System.out.println("4. Calculate Statistics");  
+            System.out.println("5. Exit");  
+            System.out.print("Enter your choice: ");  
+            choice = scanner.nextInt();  
+            scanner.nextLine();  // Consume newline  
+  
+            switch (choice) {  
+                case 1:  
+                    System.out.print("Enter date (yyyy-MM-dd): ");  
+                    String date = scanner.nextLine();  
+                    System.out.print("Enter amount: ");  
+                    double amount = scanner.nextDouble();  
+                    scanner.nextLine();  // Consume newline  
+                    System.out.print("Enter category: ");  
+                    String category = scanner.nextLine();  
+                    System.out.print("Enter note (optional): ");  
+                    String note = scanner.nextLine();  
+                    try {  
+                        recordIncome(date, amount, category, note);  
+                    } catch (ParseException e) {  
+                        System.out.println("Invalid date format. Use yyyy-MM-dd.");  
+                    }  
+                    break;  
+                case 2:  
+                    System.out.print("Enter date (yyyy-MM-dd): ");  
+                    date = scanner.nextLine();  
+                    System.out.print("Enter amount: ");  
+                    amount = scanner.nextDouble();  
+                    scanner.nextLine();  // Consume newline  
+                    System.out.print("Enter category: ");  
+                    category = scanner.nextLine();  
+                    System.out.print("Enter note (optional): ");  
+                    note = scanner.nextLine();  
+                    try {  
+                        recordExpense(date, amount, category, note);  
+                    } catch (ParseException e) {  
+                        System.out.println("Invalid date format. Use yyyy-MM-dd.");  
+                    }  
+                    break;  
+                case 3:  
+                    listTransactions();  
+                    break;  
+                case 4:  
+                    calculateStatistics();  
+                    break;  
+                case 5:  
+                    System.out.println("the end");//在此处进行了修改
+                    break;  
+                default:  
+                    System.out.println("Invalid choice. Please try again.");  
+            }  
+        } while (choice != 5);  
+  
+        scanner.close();  
+    }  
+  
+    public static void main(String[] args) {  
+        PersonalFinanceManager manager = new PersonalFinanceManager();  
+        manager.run();  
+    }  
+}
